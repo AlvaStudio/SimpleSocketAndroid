@@ -20,6 +20,10 @@ public class Connection {
         aSocket.execute();
     }
 
+    public void stopConnection() {
+        aSocket.onCancelled();
+    }
+
     public ASocket getASocket() {
         return aSocket;
     }

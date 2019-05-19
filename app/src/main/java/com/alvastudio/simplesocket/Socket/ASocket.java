@@ -35,7 +35,10 @@ public class ASocket extends AsyncTask<String, Void, Void> {
     private void connectionClose() {
         Log.d("ASocket", "Disconnected");
         try {
-            if (isOpen) socket.close();
+            if (isOpen) {
+                socketSender.sendMessage("Exit");
+                socket.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
