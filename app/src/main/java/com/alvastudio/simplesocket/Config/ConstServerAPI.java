@@ -1,4 +1,4 @@
-package com.alvastudio.simplesocket.Socket;
+package com.alvastudio.simplesocket.Config;
 
 /**
  * Created by Apino on 14.08.16.

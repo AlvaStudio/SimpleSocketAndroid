@@ -6,31 +6,45 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/connectBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Connect"/>
+    <RelativeLayout
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/disconnectBtn"
-        android:layout_below="@id/connectBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Disconnect"/>
+        <Button
+            android:id="@+id/connectBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Connect"/>
 
-    <Button
-        android:id="@+id/startRecordBtn"
-        android:layout_below="@id/disconnectBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start Record"/>
+        <Button
+            android:id="@+id/disconnectBtn"
+            android:layout_below="@id/connectBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Disconnect"/>
 
-    <Button
-        android:id="@+id/stopRecordBtn"
-        android:layout_below="@id/startRecordBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Stop Record"/>
+        <EditText
+            android:layout_marginTop="50dp"
+            android:hint="Введите ID пользователя"
+            android:id="@+id/editText"
+            android:layout_below="@id/disconnectBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/startRecordBtn"
+            android:layout_below="@id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start Call"/>
+
+        <Button
+            android:id="@+id/stopRecordBtn"
+            android:layout_below="@id/startRecordBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stop Call"/>
+    </RelativeLayout>
 
 </RelativeLayout>

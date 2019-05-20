@@ -3,6 +3,8 @@ package com.alvastudio.simplesocket.Socket;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.alvastudio.simplesocket.Config.ConstServerAPI;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;

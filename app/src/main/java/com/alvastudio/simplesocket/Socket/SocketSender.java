@@ -8,12 +8,12 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-class SocketSender extends Thread {
+public class SocketSender extends Thread {
 
     private PrintWriter printWriter;
     private ArrayList<String> messageQueue = new ArrayList<>();
 
-    public SocketSender(OutputStream outputStream) {
+    SocketSender(OutputStream outputStream) {
         this.printWriter = new PrintWriter(new OutputStreamWriter(outputStream), true);
     }
 
