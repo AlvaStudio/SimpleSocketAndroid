@@ -1,16 +1,19 @@
+//
+// Created by Naman on 26/01/16.
+//
 
 #include "AndroidLame.h"
 #include <jni.h>
 
 lame_global_flags *glf;
 
-JNIEXPORT void JNICALL Java_com_example_androidlame_AndroidLame_initializeDefault(
+JNIEXPORT void JNICALL Java_com_naman14_androidlame_AndroidLame_initializeDefault(
         JNIEnv *env, jclass cls) {
 
     glf = initializeDefault(env);
 }
 
-JNIEXPORT void JNICALL Java_com_example_androidlame_AndroidLame_initialize(
+JNIEXPORT void JNICALL Java_com_naman14_androidlame_AndroidLame_initialize(
         JNIEnv *env, jclass cls, jint inSamplerate, jint outChannel,
         jint outSamplerate, jint outBitrate, jfloat scaleInput, jint mode, jint vbrMode,
         jint quality, jint vbrQuality, jint abrMeanBitrate, jint lowpassFreq, jint highpassFreq,
@@ -25,24 +28,24 @@ JNIEXPORT void JNICALL Java_com_example_androidlame_AndroidLame_initialize(
                      id3tagComment);
 }
 
-JNIEXPORT jint JNICALL Java_com_example_androidlame_AndroidLame_lameEncode(
+JNIEXPORT jint JNICALL Java_com_naman14_androidlame_AndroidLame_lameEncode(
         JNIEnv *env, jclass cls, jshortArray buffer_l,
         jshortArray buffer_r, jint samples, jbyteArray mp3buf) {
     return encode(env, glf, buffer_l, buffer_r, samples, mp3buf);
 }
 
-JNIEXPORT jint JNICALL Java_com_example_androidlame_AndroidLame_encodeBufferInterleaved(
+JNIEXPORT jint JNICALL Java_com_naman14_androidlame_AndroidLame_encodeBufferInterleaved(
         JNIEnv *env, jclass cls, jshortArray pcm,
         jint samples, jbyteArray mp3buf) {
     return encodeBufferInterleaved(env, glf, pcm, samples, mp3buf);
 }
 
-JNIEXPORT jint JNICALL Java_com_example_androidlame_AndroidLame_lameFlush(
+JNIEXPORT jint JNICALL Java_com_naman14_androidlame_AndroidLame_lameFlush(
         JNIEnv *env, jclass cls, jbyteArray mp3buf) {
     return flush(env, glf, mp3buf);
 }
 
-JNIEXPORT void JNICALL Java_com_example_androidlame_AndroidLame_lameClose(
+JNIEXPORT void JNICALL Java_com_naman14_androidlame_AndroidLame_lameClose(
         JNIEnv *env, jclass cls) {
     close(glf);
 }
