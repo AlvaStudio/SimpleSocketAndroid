@@ -28,6 +28,7 @@
             android:layout_marginTop="50dp"
             android:hint="Введите ID пользователя"
             android:id="@+id/editText"
+            android:inputType="number"
             android:layout_below="@id/disconnectBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

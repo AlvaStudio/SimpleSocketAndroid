@@ -2,13 +2,17 @@ package com.alvastudio.simplesocket.Socket;
 
 import android.util.Log;
 
-import java.io.IOException;
+import com.alvastudio.simplesocket.Interfaces.ICommandSocketSender;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-public class SocketSender extends Thread {
+public class SocketSender extends Thread implements ICommandSocketSender {
 
     private PrintWriter printWriter;
     private ArrayList<String> messageQueue = new ArrayList<>();
@@ -59,4 +63,21 @@ public class SocketSender extends Thread {
     }
 
 
+    /*
+     * Вот тут будем писать методы которые отправляют команды серверу
+     * */
+
+
+    @Override
+    public void callUserByID(String id) {
+        JSONObject js = new JSONObject();
+        try {
+            js.put("userID",id);
+            sendMessage(js.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 }

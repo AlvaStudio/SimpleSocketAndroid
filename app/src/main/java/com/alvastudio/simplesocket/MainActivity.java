@@ -1,20 +1,16 @@
 package com.alvastudio.simplesocket;
 
 import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.alvastudio.simplesocket.Socket.ASocket;
+import com.alvastudio.simplesocket.Interfaces.IASocketState;
+import com.alvastudio.simplesocket.Interfaces.ICommandSocketSender;
 import com.alvastudio.simplesocket.Socket.Connection;
-import com.alvastudio.simplesocket.Socket.SocketSender;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -26,9 +22,9 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, IASocketState {
 
-    private Thread mThread;
+    private ICommandSocketSender mSender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initButton() {
-        EditText editText = findViewById(R.id.editText);
+
+
 
         Button connectBtn = findViewById(R.id.connectBtn);
         connectBtn.setOnClickListener(this);
@@ -51,22 +48,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button startRecordBtn = findViewById(R.id.startRecordBtn);
         startRecordBtn.setOnClickListener(this);
-        startRecordBtn.setTag(editText.getTag().toString());
+
+
 
 
         Button stopRecordBtn = findViewById(R.id.stopRecordBtn);
         stopRecordBtn.setOnClickListener(this);
 
     }
-
-    @Override
-    protected void onPause() {
-        if (mThread != null){
-            mThread.interrupt();
-        }
-        super.onPause();
-    }
-
     private void checkPerm() {
         Dexter.withActivity(this)
                 .withPermissions(
@@ -82,31 +71,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.connectBtn:
-                Connection.getInstance().initConnection();
+                Connection.getInstance().initConnection(MainActivity.this);
                 break;
             case R.id.disconnectBtn:
                 Connection.getInstance().stopConnection();
                 break;
             case R.id.startRecordBtn:
-                int userID = (int)v.getTag();
 
+                EditText editText = findViewById(R.id.editText);
+                String userID = editText.getText().toString();
 
-                JSONObject js = new JSONObject();
-                try {
-                    js.put("userID",userID);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (userID.length() != 0){
+                    mSender.callUserByID(userID);
+                    //mThread = new RecordMP3();
+                    //mThread.start();
+                } else {
+                    Toast.makeText(this,"Введите ID пользователя",Toast.LENGTH_SHORT).show();
                 }
 
-
-                //FIXME необходимо отправить сообещение серверу о том что я хочу позвонить кому-то
-                Connection.getInstance().getASocket().getSocketSender().sendMessage(js.toString());
-
-                //mThread = new RecordMP3();
-                //mThread.start();
                 break;
             case R.id.stopRecordBtn:
 
         }
+    }
+
+    @Override
+    public void setSender() {
+        this.mSender = Connection.getInstance().getSocketSender();
+    }
+
+    @Override
+    public void connectionReady() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this,"Подключено",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void connectionError() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this,"Ошибка подключения или сервер недоступен",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void disconnect() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this,"Отключено",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

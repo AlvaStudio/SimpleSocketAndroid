@@ -2,6 +2,8 @@ package com.alvastudio.simplesocket.Socket;
 
 import android.util.Log;
 
+import com.alvastudio.simplesocket.Interfaces.ICommandSocketSender;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 class SocketListener extends Thread {
     private BufferedReader bufferedReader;
+    private ICommandSocketSender mSender;
 
     public SocketListener() {
 
@@ -17,6 +20,7 @@ class SocketListener extends Thread {
 
     public void setBufferedReader(InputStream inputStream) {
         this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        this.mSender = Connection.getInstance().getSocketSender();
     }
 
     @Override

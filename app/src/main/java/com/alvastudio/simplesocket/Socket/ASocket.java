@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.alvastudio.simplesocket.Config.ConstServerAPI;
+import com.alvastudio.simplesocket.Interfaces.IASocketState;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -15,10 +16,12 @@ public class ASocket extends AsyncTask<String, Void, Void> {
     private SocketListener socketListener;
     private SocketSender socketSender;
     private boolean isOpen = false;
+    private IASocketState mConnectionState;
 
-    public ASocket() {
+    public ASocket(IASocketState connectionState) {
         Log.d("ASocket", "init");
         socketListener = new SocketListener();
+        this.mConnectionState = connectionState;
     }
 
     @Override
@@ -41,8 +44,14 @@ public class ASocket extends AsyncTask<String, Void, Void> {
                 socketSender.sendMessage("Exit");
                 socket.close();
             }
+            if (socket != null){
+                if (socket.isClosed()){
+                    mConnectionState.disconnect();
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
+            mConnectionState.connectionError();
         }
     }
 
@@ -50,20 +59,33 @@ public class ASocket extends AsyncTask<String, Void, Void> {
         try {
             InetAddress inetAddress = InetAddress.getByName(ConstServerAPI.ADDRESS);
             socket = new Socket(inetAddress, ConstServerAPI.PORT);
+            socket.setSoTimeout(1000);
 
             if (socketListener != null) {
                 socketListener.setBufferedReader(socket.getInputStream());
+                socketListener.start();
             }
 
             socketSender = new SocketSender(socket.getOutputStream());
             socketSender.start();
+
+            Connection.getInstance().setSocketSender(socketSender);
+            mConnectionState.setSender();
+
+
             socketSender.sendMessage("Hello...");
+
+
+            if (socket.isConnected()){
+                mConnectionState.connectionReady();
+            }
 
             isOpen = true;
 
         } catch (IOException e) {
             Log.d("ASocket", "Not connected");
             cancel(true);
+            mConnectionState.connectionError();
             e.printStackTrace();
         }
     }
