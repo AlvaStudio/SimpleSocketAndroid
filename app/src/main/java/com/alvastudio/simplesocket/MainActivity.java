@@ -1,14 +1,12 @@
 package com.alvastudio.simplesocket;
 
 import android.Manifest;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.alvastudio.simplesocket.Interfaces.IASocketState;
 import com.alvastudio.simplesocket.Interfaces.ICommandSocketSender;
 import com.alvastudio.simplesocket.Socket.Connection;
 import com.karumi.dexter.Dexter;
@@ -17,14 +15,11 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, IASocketState {
-
+public class MainActivity extends YourChatActivity {
     private ICommandSocketSender mSender;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +28,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         checkPerm();
         initButton();
-
     }
 
     private void initButton() {
-
-
 
         Button connectBtn = findViewById(R.id.connectBtn);
         connectBtn.setOnClickListener(this);
@@ -51,11 +43,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-
         Button stopRecordBtn = findViewById(R.id.stopRecordBtn);
         stopRecordBtn.setOnClickListener(this);
 
     }
+
     private void checkPerm() {
         Dexter.withActivity(this)
                 .withPermissions(
@@ -71,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.connectBtn:
-                Connection.getInstance().initConnection(MainActivity.this);
+                Connection.getInstance().initConnection(this);
                 break;
             case R.id.disconnectBtn:
                 Connection.getInstance().stopConnection();
@@ -102,31 +94,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void connectionReady() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(MainActivity.this,"Подключено",Toast.LENGTH_SHORT).show();
-            }
-        });
+       super.connectionReady();
     }
 
     @Override
     public void connectionError() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(MainActivity.this,"Ошибка подключения или сервер недоступен",Toast.LENGTH_SHORT).show();
-            }
-        });
+        super.connectionError();
     }
 
     @Override
     public void disconnect() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(MainActivity.this,"Отключено",Toast.LENGTH_SHORT).show();
-            }
-        });
+       super.disconnect();
+    }
+
+    @Override
+    public void callUserNotFound(final int userID) {
+        super.callUserNotFound(userID);
     }
 }

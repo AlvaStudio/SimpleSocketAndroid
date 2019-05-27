@@ -1,11 +1,12 @@
 package com.alvastudio.simplesocket.Socket;
 
-import com.alvastudio.simplesocket.Interfaces.IASocketState;
+import com.alvastudio.simplesocket.YourChatActivity;
 
 public class Connection {
     private static Connection instance;
     private ASocket aSocket;
     private SocketSender mSocketSender;
+
 
     public Connection() {
     }
@@ -18,7 +19,7 @@ public class Connection {
         return Connection.instance;
     }
 
-    public void initConnection(IASocketState connectionState) {
+    public void initConnection(YourChatActivity connectionState) {
         if (aSocket == null){
             this.aSocket = new ASocket(connectionState);
             aSocket.execute();
@@ -42,7 +43,7 @@ public class Connection {
         return mSocketSender;
     }
 
-    public void setSocketSender(SocketSender socketSender) {
+    void setSocketSender(SocketSender socketSender) {
         mSocketSender = socketSender;
     }
 }

@@ -3,8 +3,8 @@ package com.alvastudio.simplesocket.Socket;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.alvastudio.simplesocket.YourChatActivity;
 import com.alvastudio.simplesocket.Config.ConstServerAPI;
-import com.alvastudio.simplesocket.Interfaces.IASocketState;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -16,9 +16,9 @@ public class ASocket extends AsyncTask<String, Void, Void> {
     private SocketListener socketListener;
     private SocketSender socketSender;
     private boolean isOpen = false;
-    private IASocketState mConnectionState;
+    private YourChatActivity mConnectionState;
 
-    public ASocket(IASocketState connectionState) {
+    ASocket(YourChatActivity connectionState) {
         Log.d("ASocket", "init");
         socketListener = new SocketListener();
         this.mConnectionState = connectionState;
@@ -59,10 +59,11 @@ public class ASocket extends AsyncTask<String, Void, Void> {
         try {
             InetAddress inetAddress = InetAddress.getByName(ConstServerAPI.ADDRESS);
             socket = new Socket(inetAddress, ConstServerAPI.PORT);
-            socket.setSoTimeout(1000);
 
             if (socketListener != null) {
+
                 socketListener.setBufferedReader(socket.getInputStream());
+                mConnectionState.setListener();
                 socketListener.start();
             }
 
